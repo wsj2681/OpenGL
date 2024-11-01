@@ -19,4 +19,10 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="shader.vert">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="shader.frag" />
+  </ItemGroup>
 </Project>
