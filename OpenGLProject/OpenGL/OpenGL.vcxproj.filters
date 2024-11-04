@@ -13,16 +13,38 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="소스 파일\01.Core">
+      <UniqueIdentifier>{f9851415-0384-498a-a4b1-5bbadf423dff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\00.Main">
+      <UniqueIdentifier>{396103a7-eaef-4625-9f2b-eb15785595a7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Core.cpp">
+      <Filter>소스 파일\01.Core</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>소스 파일\00.Main</Filter>
+    </ClCompile>
     <ClCompile Include="OpenGL.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\00.Main</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.h">
+      <Filter>헤더 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.vert">
       <Filter>리소스 파일</Filter>
     </None>
-    <None Include="shader.frag" />
+    <None Include="shader.frag">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Core.h">
+      <Filter>소스 파일\01.Core</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
