@@ -75,46 +75,79 @@ void Core::CreateTriangle()
 
 void Core::CreateCircle(float radius, int segment)
 {
-	vector<float> vertices;
-	vector<float> colors;
+	vector<float> vertices1;
+	vector<float> colors1;
 	for (int i = 0; i < segment; ++i)
 	{
 		float angle = 2.f * M_PI * float(i) / float(segment);
-		float x = radius * cos(angle);
+		float x = radius * cos(angle) - 0.5;
 		float y = radius * sin(angle);
 
-		vertices.push_back(x);
-		vertices.push_back(y);
-		vertices.push_back(0.0f);
+		vertices1.push_back(x);
+		vertices1.push_back(y);
+		vertices1.push_back(0.0f);
 
 		float r = (sin(angle + 0.0f) * 0.5f + 0.5f);
 		float g = (sin(angle + 2.0f * M_PI / 3.0f) * 0.5f + 0.5f);
 		float b = (sin(angle + 4.0f * M_PI / 3.0f) * 0.5f + 0.5f);
-		colors.push_back(r);
-		colors.push_back(g);
-		colors.push_back(b);
+		colors1.push_back(r);
+		colors1.push_back(g);
+		colors1.push_back(b);
 	}
+	vector<float> vertices2;
+	vector<float> colors2;
 
-	GLuint circleVAO, circleVBO, circleColorVBO;
-	glGenVertexArrays(1, &circleVAO);
-	glBindVertexArray(circleVAO);
+	for (int i = 0; i < segment; ++i)
+	{
+		float angle = 2.f * M_PI * float(i) / float(segment);
+		float x = radius * cos(angle) + 0.5f;
+		float y = radius * sin(angle);
 
-	glGenBuffers(1, &circleVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, circleVBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+		vertices2.push_back(x);
+		vertices2.push_back(y);
+		vertices2.push_back(0.0f);
+
+		float r = (sin(angle + 0.0f) * 0.5f + 0.5f);
+		float g = (sin(angle + 2.0f * M_PI / 3.0f) * 0.5f + 0.5f);
+		float b = (sin(angle + 4.0f * M_PI / 3.0f) * 0.5f + 0.5f);
+		colors2.push_back(r);
+		colors2.push_back(g);
+		colors2.push_back(b);
+	}
+	glGenVertexArrays(1, &circleVAO1);
+	glBindVertexArray(circleVAO1);
+
+	glGenBuffers(1, &circleVBO1);
+	glBindBuffer(GL_ARRAY_BUFFER, circleVBO1);
+	glBufferData(GL_ARRAY_BUFFER, vertices1.size() * sizeof(float), vertices1.data(), GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*)0);
 	glEnableVertexAttribArray(0);
 
-	glGenBuffers(1, &circleColorVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, circleColorVBO);
-	glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(float), colors.data(), GL_STATIC_DRAW);
+	glGenBuffers(1, &circleColorVBO1);
+	glBindBuffer(GL_ARRAY_BUFFER, circleColorVBO1);
+	glBufferData(GL_ARRAY_BUFFER, colors1.size() * sizeof(float), colors1.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*)0);
+	glEnableVertexAttribArray(1);
+
+
+	glGenVertexArrays(1, &circleVAO2);
+	glBindVertexArray(circleVAO2);
+
+	glGenBuffers(1, &circleVBO2);
+	glBindBuffer(GL_ARRAY_BUFFER, circleVBO2);
+	glBufferData(GL_ARRAY_BUFFER, vertices2.size() * sizeof(float), vertices2.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glGenBuffers(1, &circleColorVBO2);
+	glBindBuffer(GL_ARRAY_BUFFER, circleColorVBO2);
+	glBufferData(GL_ARRAY_BUFFER, colors2.size() * sizeof(float), colors2.data(), GL_STATIC_DRAW);
 	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*)0);
 	glEnableVertexAttribArray(1);
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
-	this->circleVAO = circleVAO;
-	this->circleVBO = circleVBO;
+
 }
 
 string Core::ReadFile(const string& filePath)
@@ -223,17 +256,24 @@ void Core::Render()
 {
 	while (!glfwWindowShouldClose(this->window))
 	{
-		glClearColor(0.f, 0.f, 0.f, 0.f);
+		glClearColor(1.f, 1.f, 1.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		
 		glUseProgram(shader);
 
-		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		//glBindVertexArray(VAO);
+		//glDrawArrays(GL_TRIANGLES, 0, 3);
+		//glBindVertexArray(0);
+
+
+		glBindVertexArray(circleVAO1);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 36);
 		glBindVertexArray(0);
 
-
-		glBindVertexArray(circleVAO);
+		glBindVertexArray(circleVAO2);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 36);
 		glBindVertexArray(0);
 

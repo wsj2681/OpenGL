@@ -19,8 +19,13 @@ private:
 	GLuint shader = 0;
 	GLuint VBO = 0;
 	GLuint VAO = 0;
-	GLuint circleVAO = 0;
-	GLuint circleVBO = 0;
+	GLuint circleVAO1 = 0;
+	GLuint circleVBO1 = 0;
+	GLuint circleColorVBO1 = 0;
+
+	GLuint circleVAO2 = 0;
+	GLuint circleVBO2 = 0;
+	GLuint circleColorVBO2 = 0;
 public:
 
 	void Init();
