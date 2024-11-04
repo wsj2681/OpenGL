@@ -80,7 +80,7 @@ void Core::CreateCircle(float radius, int segment)
 	for (int i = 0; i < segment; ++i)
 	{
 		float angle = 2.f * M_PI * float(i) / float(segment);
-		float x = radius * cos(angle) - 0.5;
+		float x = radius * cos(angle) - 0.5f;
 		float y = radius * sin(angle);
 
 		vertices1.push_back(x);
@@ -269,9 +269,20 @@ void Core::Render()
 		//glBindVertexArray(0);
 
 
+		mat4 model = glm::translate(mat4(1.f), vec3(position.x, position.y, 0.f));
+		GLuint modelLoc = glGetUniformLocation(shader, "model");
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
 		glBindVertexArray(circleVAO1);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 36);
 		glBindVertexArray(0);
+
+
+
+		mat4 model2 = glm::translate(mat4(1.f), vec3(0.f, 0.f, 0.f));
+		GLuint modelLoc2 = glGetUniformLocation(shader, "model");
+		glUniformMatrix4fv(modelLoc2, 1, GL_FALSE, glm::value_ptr(model2));
+
 
 		glBindVertexArray(circleVAO2);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 36);
@@ -314,7 +325,7 @@ void Core::MouseWheelCallback(GLFWwindow* window, double x, double y)
 
 void Core::WheelUpdate(double y)
 {
-	zoomlevel += y * 0.1f;
+	zoomlevel += static_cast<float>(y) * 0.1f;
 	if (zoomlevel < 0.5f)
 	{
 		zoomlevel = 0.5f;
@@ -328,8 +339,24 @@ void Core::WheelUpdate(double y)
 
 void Core::KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
+	Core* otherwindow = static_cast<Core*>(glfwGetWindowUserPointer(window));
 	if (action == GLFW_PRESS)
 	{
-		cout << "key press : "<< key << endl;
+		if (key == GLFW_KEY_W)
+		{
+			otherwindow->position.y += 0.1f;
+		}
+		else if (key == GLFW_KEY_S)
+		{
+			otherwindow->position.y -= 0.1f;
+		}
+		else if (key == GLFW_KEY_A)
+		{
+			otherwindow->position.x -= 0.1f;
+		}
+		else if (key == GLFW_KEY_D)
+		{
+			otherwindow->position.x += 0.1f;
+		}
 	}
 }

@@ -26,6 +26,9 @@ private:
 	GLuint circleVAO2 = 0;
 	GLuint circleVBO2 = 0;
 	GLuint circleColorVBO2 = 0;
+
+	vec2 position = { 0.f, 0.f };
+
 public:
 
 	void Init();
