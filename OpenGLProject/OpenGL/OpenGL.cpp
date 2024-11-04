@@ -7,6 +7,8 @@
 
 using namespace std;
 
+#include "Core.h"
+
 GLuint shader = 0;
 
 
@@ -16,7 +18,9 @@ GLuint AddShader(const string& shaderCode, GLenum shaderType);
 void CompileShader(const string& vsCode, const string& fsCode);
 void CreateShaderProgramFromFiles(const string& vsPath, const string& fsPath);
 
-int main()
+
+
+int test()
 {
 	GLFWwindow* window;
 	
@@ -46,6 +50,9 @@ int main()
 	// view port 설정
 	int framebuffer_width = 0, framebuffer_height = 0;
 	glfwGetFramebufferSize(window, &framebuffer_width, &framebuffer_height);
+	cout << "framebuffer_width : " << framebuffer_width << endl;
+	cout << "framevuffer_height: " << framebuffer_height << endl;
+	
 	glViewport(0, 0, framebuffer_width, framebuffer_height);
 
 
