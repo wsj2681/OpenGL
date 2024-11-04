@@ -19,11 +19,14 @@ private:
 	GLuint shader = 0;
 	GLuint VBO = 0;
 	GLuint VAO = 0;
-
+	GLuint circleVAO = 0;
+	GLuint circleVBO = 0;
 public:
 
 	void Init();
 	void CreateTriangle();
+	void CreateCircle(float radius, int segment);
+
 	string ReadFile(const string& filePath);
 	GLuint AddShader(const string& shadercode, GLenum shadertype);
 	void CompileShader(const string& vscode, const string& fscode);

@@ -45,7 +45,8 @@ void Core::Init()
 		exit(EXIT_FAILURE);
 	}
 
-	CreateTriangle();
+	//CreateTriangle();
+	CreateCircle(0.5f, 36);
 	CreateShaderProgramFromFiles("shader.vert", "shader.frag");
 
 
@@ -54,9 +55,9 @@ void Core::Init()
 void Core::CreateTriangle()
 {
 	float vertices[] = {
--0.5f, -0.5f, 0.0f,
- 0.5f, -0.5f, 0.0f,
- 0.0f,  0.5f, 0.0f
+		-0.5f, -0.5f, 0.0f,
+		 0.5f, -0.5f, 0.0f,
+		 0.0f,  0.5f, 0.0f
 	};
 
 	glGenVertexArrays(1, &VAO);
@@ -64,17 +65,56 @@ void Core::CreateTriangle()
 
 	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-
-	// 4번째 인자는 데이터를 어떻게 사용할 것인가에 대한 힌트이다.
-	// /OpenGL/공부내용/glBufferData 사용법.txt
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*)0);
 	glEnableVertexAttribArray(0);
 
 	glBindVertexArray(0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+}
+
+void Core::CreateCircle(float radius, int segment)
+{
+	vector<float> vertices;
+	vector<float> colors;
+	for (int i = 0; i < segment; ++i)
+	{
+		float angle = 2.f * M_PI * float(i) / float(segment);
+		float x = radius * cos(angle);
+		float y = radius * sin(angle);
+
+		vertices.push_back(x);
+		vertices.push_back(y);
+		vertices.push_back(0.0f);
+
+		float r = (sin(angle + 0.0f) * 0.5f + 0.5f);
+		float g = (sin(angle + 2.0f * M_PI / 3.0f) * 0.5f + 0.5f);
+		float b = (sin(angle + 4.0f * M_PI / 3.0f) * 0.5f + 0.5f);
+		colors.push_back(r);
+		colors.push_back(g);
+		colors.push_back(b);
+	}
+
+	GLuint circleVAO, circleVBO, circleColorVBO;
+	glGenVertexArrays(1, &circleVAO);
+	glBindVertexArray(circleVAO);
+
+	glGenBuffers(1, &circleVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, circleVBO);
+	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*)0);
+	glEnableVertexAttribArray(0);
+
+	glGenBuffers(1, &circleColorVBO);
+	glBindBuffer(GL_ARRAY_BUFFER, circleColorVBO);
+	glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(float), colors.data(), GL_STATIC_DRAW);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*)0);
+	glEnableVertexAttribArray(1);
+
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glBindVertexArray(0);
+	this->circleVAO = circleVAO;
+	this->circleVBO = circleVBO;
 }
 
 string Core::ReadFile(const string& filePath)
@@ -190,6 +230,11 @@ void Core::Render()
 
 		glBindVertexArray(VAO);
 		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glBindVertexArray(0);
+
+
+		glBindVertexArray(circleVAO);
+		glDrawArrays(GL_TRIANGLE_FAN, 0, 36);
 		glBindVertexArray(0);
 
 		glfwSwapBuffers(this->window);
