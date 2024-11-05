@@ -29,11 +29,17 @@ private:
 
 	vec2 position = { 0.f, 0.f };
 
+	GLuint ballVAO = 0;
+	GLuint ballVBO = 0;
+	GLuint ballColorVBO = 0;
+	
+	int ballsize = 0;
 public:
 
 	void Init();
 	void CreateTriangle();
 	void CreateCircle(float radius, int segment, float z_position);
+	void CreateBall(float radius, int sectorCount, int stackCount);
 
 	string ReadFile(const string& filePath);
 	GLuint AddShader(const string& shadercode, GLenum shadertype);
