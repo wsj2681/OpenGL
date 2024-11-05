@@ -1,5 +1,9 @@
 #pragma once
 #include "stdafx.h"
+#include "ShaderTool.h"
+#include "Triangle.h"
+#include "Circle.h"
+#include "Cube.h"
 
 class Core
 {
@@ -14,50 +18,20 @@ private:
 	int framebuffer_width = 0;
 	int framebuffer_height = 0;
 
-	float zoomlevel = 1.f;
+	ShaderTool* shaderTool = nullptr;
+	GLuint programID = 0;
 
-	GLuint shader = 0;
-	GLuint VBO = 0;
-	GLuint VAO = 0;
-	GLuint circleVAO1 = 0;
-	GLuint circleVBO1 = 0;
-	GLuint circleColorVBO1 = 0;
+	Triangle* triangle = nullptr;
+	Circle* circle = nullptr;
 
-	GLuint circleVAO2 = 0;
-	GLuint circleVBO2 = 0;
-	GLuint circleColorVBO2 = 0;
+	Cube* cube = nullptr;
 
-	vec2 position = { 0.f, 0.f };
-
-	GLuint ballVAO = 0;
-	GLuint ballVBO = 0;
-	GLuint ballColorVBO = 0;
-	
-	int ballsize = 0;
+	//view values
+	GLuint MatrixID = 0;
+	mat4 MVP;
 public:
-
 	void Init();
-	void CreateTriangle();
-	void CreateCircle(float radius, int segment, float z_position);
-	void CreateBall(float radius, int sectorCount, int stackCount);
-
-	string ReadFile(const string& filePath);
-	GLuint AddShader(const string& shadercode, GLenum shadertype);
-	void CompileShader(const string& vscode, const string& fscode);
-	void CreateShaderProgramFromFiles(const string& vspath, const string& fspath);
-
 	void Destory();
-
-	void Update();
-
-	void UpdateViewport();
-
 	void Render();
-
-	static void MouseCallback(GLFWwindow* window, int button, int action, int mods);
-	static void MouseWheelCallback(GLFWwindow* window, double x, double y);
-	void WheelUpdate(double y);
-
-	static void KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 };
 

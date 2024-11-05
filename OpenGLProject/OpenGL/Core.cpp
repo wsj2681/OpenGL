@@ -2,11 +2,12 @@
 
 Core::Core()
 {
-	this->Init();
+	Init();
 }
 
 Core::~Core()
 {
+	Destory();
 }
 
 void Core::Init()
@@ -31,13 +32,7 @@ void Core::Init()
 	}
 
 	glfwMakeContextCurrent(this->window);
-	glfwSetWindowUserPointer(window, this);
-	glfwSetKeyCallback(window, KeyboardCallback);
-	glfwSetMouseButtonCallback(window, MouseCallback);
-	glfwSetScrollCallback(window, MouseWheelCallback);
-
 	glfwGetFramebufferSize(window, &framebuffer_width, &framebuffer_height);
-	glViewport(0, 0, framebuffer_width, framebuffer_height);
 
 	if (glewInit() != GLEW_OK)
 	{
@@ -45,265 +40,31 @@ void Core::Init()
 		exit(EXIT_FAILURE);
 	}
 
-	//CreateTriangle();
-	CreateCircle(0.5f, 36, 1.f);
-	CreateBall(0.5f, 18, 12);
-	CreateShaderProgramFromFiles("shader.vert", "shader.frag");
+	glClearColor(0.f, 0.f, 0.4f, 0.f);
+	glEnable(GL_DEPTH_TEST);
+	glDepthFunc(GL_LESS);
 
+	// Create ShaderTool
+	shaderTool = new ShaderTool;
+	programID = shaderTool->LoadShaders("shader.vert", "shader.frag");
 
-}
+	//
+	MatrixID = glGetUniformLocation(programID, "MVP");
+	mat4 projection = perspective(radians(45.f), 4.f / 3.f, 0.1f, 100.f);
 
-void Core::CreateTriangle()
-{
-	float vertices[] = {
-		-0.5f, -0.5f, 0.0f,
-		 0.5f, -0.5f, 0.0f,
-		 0.0f,  0.5f, 0.0f
-	};
+	mat4 view = lookAt(
+		vec3(4.f, 3.f, -3.f),
+		vec3(0.f, 0.f, 0.f),
+		vec3(0.f, 1.f, 0.f)
+	);
+	mat4 model = mat4(1.f);
+	MVP = projection * view * model;
 
-	glGenVertexArrays(1, &VAO);
-	glBindVertexArray(VAO);
+	// Create Object
+	//triangle = new Triangle;
+	//circle = new Circle;
+	cube = new Cube;
 
-	glGenBuffers(1, &VBO);
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	glBindVertexArray(0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-}
-
-void Core::CreateCircle(float radius, int segment, float z_position)
-{
-	vector<float> vertices1;
-	vector<float> colors1;
-	for (int i = 0; i < segment; ++i)
-	{
-		float angle = 2.f * M_PI * float(i) / float(segment);
-		float x = radius * cos(angle) - 0.5f;
-		float y = radius * sin(angle);
-
-		vertices1.push_back(x);
-		vertices1.push_back(y);
-		vertices1.push_back(z_position);
-
-		float r = (sin(angle + 0.0f) * 0.5f + 0.5f);
-		float g = (sin(angle + 2.0f * M_PI / 3.0f) * 0.5f + 0.5f);
-		float b = (sin(angle + 4.0f * M_PI / 3.0f) * 0.5f + 0.5f);
-		colors1.push_back(r);
-		colors1.push_back(g);
-		colors1.push_back(b);
-	}
-
-	vector<float> vertices2;
-	vector<float> colors2;
-
-	for (int i = 0; i < segment; ++i)
-	{
-		float angle = 2.f * M_PI * float(i) / float(segment);
-		float x = radius * cos(angle) + 0.5f;
-		float y = radius * sin(angle);
-
-		vertices2.push_back(x);
-		vertices2.push_back(y);
-		vertices2.push_back(z_position - 1.f);
-
-		float r = (sin(angle + 0.0f) * 0.5f + 0.5f);
-		float g = (sin(angle + 2.0f * M_PI / 3.0f) * 0.5f + 0.5f);
-		float b = (sin(angle + 4.0f * M_PI / 3.0f) * 0.5f + 0.5f);
-		colors2.push_back(r);
-		colors2.push_back(g);
-		colors2.push_back(b);
-	}
-	glGenVertexArrays(1, &circleVAO1);
-	glBindVertexArray(circleVAO1);
-
-	glGenBuffers(1, &circleVBO1);
-	glBindBuffer(GL_ARRAY_BUFFER, circleVBO1);
-	glBufferData(GL_ARRAY_BUFFER, vertices1.size() * sizeof(float), vertices1.data(), GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	glGenBuffers(1, &circleColorVBO1);
-	glBindBuffer(GL_ARRAY_BUFFER, circleColorVBO1);
-	glBufferData(GL_ARRAY_BUFFER, colors1.size() * sizeof(float), colors1.data(), GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*)0);
-	glEnableVertexAttribArray(1);
-
-
-	glGenVertexArrays(1, &circleVAO2);
-	glBindVertexArray(circleVAO2);
-
-	glGenBuffers(1, &circleVBO2);
-	glBindBuffer(GL_ARRAY_BUFFER, circleVBO2);
-	glBufferData(GL_ARRAY_BUFFER, vertices2.size() * sizeof(float), vertices2.data(), GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	glGenBuffers(1, &circleColorVBO2);
-	glBindBuffer(GL_ARRAY_BUFFER, circleColorVBO2);
-	glBufferData(GL_ARRAY_BUFFER, colors2.size() * sizeof(float), colors2.data(), GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GL_FLOAT), (void*)0);
-	glEnableVertexAttribArray(1);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-
-}
-
-void Core::CreateBall(float radius, int sectorCount, int stackCount)
-{
-	vector<float> vertices;
-	vector<float> colors;
-
-	//for (int i = 0; i <= stackCount; ++i)
-	//{
-	//	float stackAngle = M_PI / 2 - i * M_PI / stackCount;
-	//	float xy = radius * cos(stackAngle);
-	//	float z = radius * sin(stackAngle);
-
-	//	for (int j = 0; j <= sectorCount; ++j)
-	//	{
-	//		float sectorAngle = j * 2 * M_PI / sectorCount;
-
-	//		float x = xy * cos(sectorAngle);
-	//		float y = xy * sin(sectorAngle);
-
-	//		vertices.push_back(x);
-	//		vertices.push_back(y);
-	//		vertices.push_back(z);
-
-	//		float r = (sin(sectorAngle + 0.0f) * 0.5f + 0.5f);
-	//		float g = (sin(sectorAngle + 2.0f * M_PI / 3.0f) * 0.5f + 0.5f);
-	//		float b = (sin(sectorAngle + 4.0f * M_PI / 3.0f) * 0.5f + 0.5f);
-	//		colors.push_back(0);
-	//		colors.push_back(0);
-	//		colors.push_back(0);
-	//	}
-	//}
-
-	float x, y, z;               // Vertex position
-	float sectorStep = 2 * M_PI / sectorCount; // Angle step for sector
-	float stackStep = M_PI / stackCount;       // Angle step for stack
-	float sectorAngle, stackAngle;
-
-	for (int i = 0; i <= stackCount; ++i) {
-		stackAngle = M_PI / 2 - i * stackStep; // from pi/2 to -pi/2
-		y = radius * sin(stackAngle);          // calculate y
-		float xy = radius * cos(stackAngle);   // radius at the current stack
-
-		for (int j = 0; j <= sectorCount; ++j) {
-			sectorAngle = j * sectorStep;     // calculate angle
-			x = xy * cos(sectorAngle);         // calculate x
-			z = xy * sin(sectorAngle);         // calculate z
-
-			// Add vertex position
-			vertices.push_back(x);
-			vertices.push_back(y);
-			vertices.push_back(z);
-		}
-	}
-
-	ballsize = vertices.size();
-	glGenVertexArrays(1, &ballVAO);
-	glBindVertexArray(ballVAO);
-
-	glGenBuffers(1, &ballVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, ballVBO);
-	glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(0);
-
-	glGenBuffers(1, &ballColorVBO);
-	glBindBuffer(GL_ARRAY_BUFFER, ballColorVBO);
-	glBufferData(GL_ARRAY_BUFFER, colors.size() * sizeof(float), colors.data(), GL_STATIC_DRAW);
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
-	glEnableVertexAttribArray(1);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindVertexArray(0);
-}
-
-string Core::ReadFile(const string& filePath)
-{
-	string content = "";
-	ifstream fileStream(filePath, ios::in);
-
-	if (!fileStream.is_open())
-	{
-		cout << "Failed to read " << filePath << "The file doesn't exist." << endl;
-		return string();
-	}
-
-	string line = "";
-	while (!fileStream.eof())
-	{
-		getline(fileStream, line);
-		content.append(line + '\n');
-	}
-	fileStream.close();
-
-	return content;
-}
-
-GLuint Core::AddShader(const string& shadercode, GLenum shadertype)
-{
-	GLuint new_shader = glCreateShader(shadertype);
-	const GLchar* code[1];
-	code[0] = shadercode.c_str();
-
-	glShaderSource(new_shader, 1, code, NULL);
-
-	GLint result = 0;
-	GLchar err_log[1024] = { 0 };
-
-	glCompileShader(new_shader);
-	glGetShaderiv(new_shader, GL_COMPILE_STATUS, &result);
-	if (!result)
-	{
-		glGetShaderInfoLog(new_shader, sizeof(err_log), NULL, err_log);
-		cout << "Error compiling the " << shadertype << "shader :" << err_log << endl;
-		return 0;
-	}
-
-	return new_shader;
-}
-
-void Core::CompileShader(const string& vscode, const string& fscode)
-{
-	GLuint vs, fs;
-
-	shader = glCreateProgram();
-
-	if (!shader)
-	{
-		cout << "Error: Cannot create shader program" << endl;
-		return;
-	}
-
-	vs = AddShader(vscode, GL_VERTEX_SHADER);
-	fs = AddShader(fscode, GL_FRAGMENT_SHADER);
-	glAttachShader(shader, vs);
-	glAttachShader(shader, fs);
-
-	GLint result = 0;
-	GLchar err_log[1024] = { 0 };
-	glLinkProgram(shader);
-	glGetProgramiv(shader, GL_LINK_STATUS, &result);
-	if (!result)
-	{
-		glGetProgramInfoLog(shader, sizeof(err_log), NULL, err_log);
-		cout << "Error Linking program :" << err_log << endl;
-		return;
-	}
-}
-
-void Core::CreateShaderProgramFromFiles(const string& vspath, const string& fspath)
-{
-	string vsfile = ReadFile(vspath);
-	string fsfile = ReadFile(fspath);
-	CompileShader(vsfile, fsfile);
 }
 
 void Core::Destory()
@@ -311,138 +72,28 @@ void Core::Destory()
 	glfwTerminate();
 }
 
-void Core::Update()
-{
-	glfwPollEvents();
-}
-
-void Core::UpdateViewport()
-{
-	int width = 0, height = 0;
-	glfwGetFramebufferSize(window, &width, &height);
-	int newWidth = static_cast<int>(width / zoomlevel);
-	int newHeight = static_cast<int>(height / zoomlevel);
-
-	glViewport((width - newWidth) / 2, (height - newHeight) / 2, newWidth, newHeight);
-
-}
-
 void Core::Render()
 {
 	while (!glfwWindowShouldClose(this->window))
 	{
-		glClearColor(1.f, 1.f, 1.f, 1.f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		
-		glUseProgram(shader);
+		glUseProgram(programID);
 
-		glEnable(GL_BLEND);
-		//glEnable(GL_DEPTH_TEST);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
-		//glBindVertexArray(VAO);
+		// draw triangle
+		//glBindVertexArray(triangle->getVAO());
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
-		//glBindVertexArray(0);
 
-		mat4 view = translate(mat4(1.f), vec3(0.f, 0.f, -3.f));
-		mat4 projection = perspective(radians(45.f), static_cast<float>(framebuffer_width) / static_cast<float>(framebuffer_height), 0.1f, 100.f);
+		// draw circle
+		//glBindVertexArray(circle->getVAO());
+		//glDrawArrays(GL_TRIANGLE_FAN, 0, 36);
 
-		GLuint viewLoc = glGetUniformLocation(shader, "view");
-		GLuint projLoc = glGetUniformLocation(shader, "projection");
-
-		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, value_ptr(view));
-		glUniformMatrix4fv(projLoc, 1, GL_FALSE, value_ptr(projection));
-
-		mat4 ballmodel = translate(mat4(1.f), vec3(0.f, 0.f, -2.f));
-		GLuint ballLoc = glGetUniformLocation(shader, "model");
-		glUniformMatrix4fv(ballLoc, 1, GL_FALSE, value_ptr(ballmodel));
-		glBindVertexArray(ballVAO);
-		glDrawArrays(GL_TRIANGLE_STRIP, 0, ballsize / 3);
-
-		mat4 model = glm::translate(mat4(1.f), vec3(-0.5f, 0.f, 0.f));
-		GLuint modelLoc = glGetUniformLocation(shader, "model");
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		glBindVertexArray(circleVAO1);
-		glDrawArrays(GL_TRIANGLE_FAN, 0, 36);
+		glBindVertexArray(cube->getVAO());
+		glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
 
 
-
-		mat4 model2 = glm::translate(mat4(1.f), vec3(0.5f, 0.f, -1.f));
-		GLuint modelLoc2 = glGetUniformLocation(shader, "model");
-		glUniformMatrix4fv(modelLoc2, 1, GL_FALSE, glm::value_ptr(model2));
-		glBindVertexArray(circleVAO2);
-		glDrawArrays(GL_TRIANGLE_FAN, 0, 36);
-		glBindVertexArray(0);
-
-		glfwSwapBuffers(this->window);
-		this->Update();
-	}
-}
-
-void Core::MouseCallback(GLFWwindow* window, int button, int action, int mods)
-{
-	Core* otherwindow = static_cast<Core*>(glfwGetWindowUserPointer(window));
-	double x, y;
-	if (button == GLFW_MOUSE_BUTTON_LEFT && action == GLFW_PRESS)
-	{
-	
-		glfwGetCursorPos(window, &x, &y);
-		cout << "x : " << x << " y : " << y << endl;
-	}
-	else if (button == GLFW_MOUSE_BUTTON_RIGHT && action == GLFW_PRESS)
-	{
-		cout << "right mouse press" << endl;
-	}
-	else if (button == GLFW_MOUSE_BUTTON_MIDDLE && action == GLFW_PRESS)
-	{
-		otherwindow->zoomlevel = 1.f;
-		otherwindow->UpdateViewport();
-	}
-}
-
-void Core::MouseWheelCallback(GLFWwindow* window, double x, double y)
-{
-	Core* otherwindow = static_cast<Core*>(glfwGetWindowUserPointer(window));
-	if (otherwindow)
-	{
-		otherwindow->WheelUpdate(y);
-	}
-}
-
-void Core::WheelUpdate(double y)
-{
-	zoomlevel += static_cast<float>(y) * 0.1f;
-	if (zoomlevel < 0.5f)
-	{
-		zoomlevel = 0.5f;
-	}
-	else if (zoomlevel > 4.f)
-	{
-		zoomlevel = 4.f;
-	}
-	UpdateViewport();
-}
-
-void Core::KeyboardCallback(GLFWwindow* window, int key, int scancode, int action, int mods)
-{
-	Core* otherwindow = static_cast<Core*>(glfwGetWindowUserPointer(window));
-	if (action == GLFW_PRESS)
-	{
-		if (key == GLFW_KEY_W)
-		{
-			otherwindow->position.y += 0.1f;
-		}
-		else if (key == GLFW_KEY_S)
-		{
-			otherwindow->position.y -= 0.1f;
-		}
-		else if (key == GLFW_KEY_A)
-		{
-			otherwindow->position.x -= 0.1f;
-		}
-		else if (key == GLFW_KEY_D)
-		{
-			otherwindow->position.x += 0.1f;
-		}
+		glfwSwapBuffers(window);
+		glfwPollEvents();
 	}
 }
