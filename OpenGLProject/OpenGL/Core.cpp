@@ -46,7 +46,7 @@ void Core::Init()
 	}
 
 	//CreateTriangle();
-	CreateCircle(0.5f, 36);
+	CreateCircle(0.5f, 36, 1.f);
 	CreateShaderProgramFromFiles("shader.vert", "shader.frag");
 
 
@@ -73,7 +73,7 @@ void Core::CreateTriangle()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-void Core::CreateCircle(float radius, int segment)
+void Core::CreateCircle(float radius, int segment, float z_position)
 {
 	vector<float> vertices1;
 	vector<float> colors1;
@@ -85,7 +85,7 @@ void Core::CreateCircle(float radius, int segment)
 
 		vertices1.push_back(x);
 		vertices1.push_back(y);
-		vertices1.push_back(0.0f);
+		vertices1.push_back(z_position);
 
 		float r = (sin(angle + 0.0f) * 0.5f + 0.5f);
 		float g = (sin(angle + 2.0f * M_PI / 3.0f) * 0.5f + 0.5f);
@@ -105,7 +105,7 @@ void Core::CreateCircle(float radius, int segment)
 
 		vertices2.push_back(x);
 		vertices2.push_back(y);
-		vertices2.push_back(0.0f);
+		vertices2.push_back(z_position - 1.f);
 
 		float r = (sin(angle + 0.0f) * 0.5f + 0.5f);
 		float g = (sin(angle + 2.0f * M_PI / 3.0f) * 0.5f + 0.5f);
@@ -147,6 +147,18 @@ void Core::CreateCircle(float radius, int segment)
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+
+}
+
+void Core::CreateBall(float radius, int sectorCount, int stackCount)
+{
+	vector<float> vertices;
+	vector<float> colors;
+
+	for (int i = 0; i <= stackCount; ++i)
+	{
+
+	}
 
 }
 
@@ -257,33 +269,39 @@ void Core::Render()
 	while (!glfwWindowShouldClose(this->window))
 	{
 		glClearColor(1.f, 1.f, 1.f, 1.f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		
 		glUseProgram(shader);
 
 		glEnable(GL_BLEND);
+		glEnable(GL_DEPTH_TEST);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		//glBindVertexArray(VAO);
 		//glDrawArrays(GL_TRIANGLES, 0, 3);
 		//glBindVertexArray(0);
 
+		mat4 view = translate(mat4(1.f), vec3(0.f, 0.f, -3.f));
+		mat4 projection = perspective(radians(45.f), static_cast<float>(framebuffer_width) / static_cast<float>(framebuffer_height), 0.1f, 100.f);
 
-		mat4 model = glm::translate(mat4(1.f), vec3(position.x, position.y, 0.f));
+		GLuint viewLoc = glGetUniformLocation(shader, "view");
+		GLuint projLoc = glGetUniformLocation(shader, "projection");
+
+		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, value_ptr(view));
+		glUniformMatrix4fv(projLoc, 1, GL_FALSE, value_ptr(projection));
+
+
+		mat4 model = glm::translate(mat4(1.f), vec3(-0.5f, 0.f, 0.f));
 		GLuint modelLoc = glGetUniformLocation(shader, "model");
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-
 		glBindVertexArray(circleVAO1);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 36);
-		glBindVertexArray(0);
 
 
 
-		mat4 model2 = glm::translate(mat4(1.f), vec3(0.f, 0.f, 0.f));
+		mat4 model2 = glm::translate(mat4(1.f), vec3(0.5f, 0.f, -1.f));
 		GLuint modelLoc2 = glGetUniformLocation(shader, "model");
 		glUniformMatrix4fv(modelLoc2, 1, GL_FALSE, glm::value_ptr(model2));
-
-
 		glBindVertexArray(circleVAO2);
 		glDrawArrays(GL_TRIANGLE_FAN, 0, 36);
 		glBindVertexArray(0);

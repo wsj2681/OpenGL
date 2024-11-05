@@ -33,7 +33,7 @@ public:
 
 	void Init();
 	void CreateTriangle();
-	void CreateCircle(float radius, int segment);
+	void CreateCircle(float radius, int segment, float z_position);
 
 	string ReadFile(const string& filePath);
 	GLuint AddShader(const string& shadercode, GLenum shadertype);
