@@ -17,6 +17,7 @@ void Core::Init()
 		cout << "Failed to Init window" << endl;
 		exit(EXIT_FAILURE);
 	}
+	glfwWindowHint(GLFW_SAMPLES, 4);
 
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
@@ -41,30 +42,38 @@ void Core::Init()
 	}
 
 	glClearColor(0.f, 0.f, 0.4f, 0.f);
+
 	glEnable(GL_DEPTH_TEST);
+
 	glDepthFunc(GL_LESS);
 
 	// Create ShaderTool
 	shaderTool = new ShaderTool;
-	programID = shaderTool->LoadShaders("shader.vert", "shader.frag");
+	//shaderID = shaderTool->LoadShaders("shader.vert", "shader.frag");
+	
+	shaderID = shaderTool->LoadShaders("textureshader.vert", "textureshader.frag");
 
-	//
-	MatrixID = glGetUniformLocation(programID, "MVP");
+	MatrixID = glGetUniformLocation(shaderID, "MVP");
 	mat4 projection = perspective(radians(45.f), 4.f / 3.f, 0.1f, 100.f);
 
 	mat4 view = lookAt(
-		vec3(4.f, 3.f, -3.f),
+		vec3(4.f, 3.f, 3.f),
 		vec3(0.f, 0.f, 0.f),
 		vec3(0.f, 1.f, 0.f)
 	);
 	mat4 model = mat4(1.f);
 	MVP = projection * view * model;
 
+	textureTool = new TextureTool;
+	texture = textureTool->LoadDDS("uvtemplate.DDS");
+	textureID = glGetUniformLocation(shaderID, "textureSampler");
+
 	// Create Object
 	//triangle = new Triangle;
 	//circle = new Circle;
-	cube = new Cube;
+	// cube = new Cube;
 
+	texturecube = new TextureCube;
 }
 
 void Core::Destory()
@@ -77,7 +86,7 @@ void Core::Render()
 	while (!glfwWindowShouldClose(this->window))
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glUseProgram(programID);
+		glUseProgram(shaderID);
 
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 
@@ -89,9 +98,16 @@ void Core::Render()
 		//glBindVertexArray(circle->getVAO());
 		//glDrawArrays(GL_TRIANGLE_FAN, 0, 36);
 
-		glBindVertexArray(cube->getVAO());
-		glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
+		// draw cube
+		//glBindVertexArray(cube->getVAO());
+		//glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
 
+		// draw texture cube
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glUniform1i(textureID, 0);
+		glBindVertexArray(texturecube->getVAO());
+		glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

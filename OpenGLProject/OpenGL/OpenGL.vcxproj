@@ -146,11 +146,15 @@
     <ClCompile Include="OpenGL.cpp" />
     <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="ShaderTool.cpp" />
+    <ClCompile Include="TextureCube.cpp" />
+    <ClCompile Include="TextureTool.cpp" />
     <ClCompile Include="Triangle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.frag" />
     <None Include="shader.vert" />
+    <None Include="textureshader.frag" />
+    <None Include="textureshader.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Circle.h" />
@@ -159,6 +163,8 @@
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="ShaderTool.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TextureCube.h" />
+    <ClInclude Include="TextureTool.h" />
     <ClInclude Include="Triangle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

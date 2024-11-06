@@ -5,10 +5,6 @@
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
       <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
     </Filter>
-    <Filter Include="헤더 파일">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="리소스 파일">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
@@ -18,6 +14,30 @@
     </Filter>
     <Filter Include="소스 파일\00.Main">
       <UniqueIdentifier>{396103a7-eaef-4625-9f2b-eb15785595a7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.Polygon">
+      <UniqueIdentifier>{2bfe79ef-1305-47a8-bd21-c6d44a0c2251}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.Shader">
+      <UniqueIdentifier>{ee5fd81a-f465-48c9-abee-adc229a2d1d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\04.Texture">
+      <UniqueIdentifier>{27591bf8-2306-4691-96da-447182a9c69a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\99.Common">
+      <UniqueIdentifier>{7c0e6dbd-e2eb-4376-ae02-67a8af2b1655}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.Polygon\00.Polygon">
+      <UniqueIdentifier>{0ac7f919-4a94-42a3-ad47-eace96bec3f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.Polygon\01.Triangle">
+      <UniqueIdentifier>{fe4cf9cc-7c80-4797-994b-0d7a7e52fb07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.Polygon\02.Circle">
+      <UniqueIdentifier>{9b3cb3ab-ae94-4fcc-aef7-19f018688a60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\02.Polygon\03.Cube">
+      <UniqueIdentifier>{cab0132c-a360-496e-a12d-a9865745e04d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -30,8 +50,26 @@
     <ClCompile Include="OpenGL.cpp">
       <Filter>소스 파일\00.Main</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.h">
-      <Filter>헤더 파일</Filter>
+    <ClCompile Include="ShaderTool.cpp">
+      <Filter>소스 파일\03.Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Polygon.cpp">
+      <Filter>소스 파일\02.Polygon\00.Polygon</Filter>
+    </ClCompile>
+    <ClCompile Include="Triangle.cpp">
+      <Filter>소스 파일\02.Polygon\01.Triangle</Filter>
+    </ClCompile>
+    <ClCompile Include="Circle.cpp">
+      <Filter>소스 파일\02.Polygon\02.Circle</Filter>
+    </ClCompile>
+    <ClCompile Include="Cube.cpp">
+      <Filter>소스 파일\02.Polygon\03.Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureTool.cpp">
+      <Filter>소스 파일\04.Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureCube.cpp">
+      <Filter>소스 파일\02.Polygon\03.Cube</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -41,10 +79,40 @@
     <None Include="shader.frag">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="textureshader.frag">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="textureshader.vert">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h">
       <Filter>소스 파일\01.Core</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>소스 파일\99.Common</Filter>
+    </ClInclude>
+    <ClInclude Include="ShaderTool.h">
+      <Filter>소스 파일\03.Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Polygon.h">
+      <Filter>소스 파일\02.Polygon\00.Polygon</Filter>
+    </ClInclude>
+    <ClInclude Include="Triangle.h">
+      <Filter>소스 파일\02.Polygon\01.Triangle</Filter>
+    </ClInclude>
+    <ClInclude Include="Circle.h">
+      <Filter>소스 파일\02.Polygon\02.Circle</Filter>
+    </ClInclude>
+    <ClInclude Include="Cube.h">
+      <Filter>소스 파일\02.Polygon\03.Cube</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureTool.h">
+      <Filter>소스 파일\04.Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureCube.h">
+      <Filter>소스 파일\02.Polygon\03.Cube</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
