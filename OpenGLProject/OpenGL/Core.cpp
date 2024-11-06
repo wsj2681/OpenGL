@@ -44,8 +44,11 @@ void Core::Init()
 	glClearColor(0.f, 0.f, 0.4f, 0.f);
 
 	glEnable(GL_DEPTH_TEST);
-
-	glDepthFunc(GL_LESS);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CCW);
+	glDepthFunc(GL_LEQUAL);
+	//glDepthFunc(GL_LESS);
 
 	// Create ShaderTool
 	shaderTool = new ShaderTool;

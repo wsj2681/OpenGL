@@ -8,5 +8,6 @@ uniform sampler2D textureSampler;
 
 void main()
 {
-	color = texture(textureSampler, UV).rgb;
+	vec2 flippedUV = vec2(UV.x, 1.0 - UV.y);
+	color = texture(textureSampler, flippedUV).rgb;
 }
