@@ -75,6 +75,12 @@
       <Filter>소스 파일\02.Polygon\03.Cube</Filter>
     </ClCompile>
     <ClCompile Include="Input.cpp">
+      <Filter>소스 파일\05.Input</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectTool.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Model.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
@@ -120,6 +126,10 @@
     <ClInclude Include="TextureCube.h">
       <Filter>소스 파일\02.Polygon\03.Cube</Filter>
     </ClInclude>
-    <ClInclude Include="Input.h" />
+    <ClInclude Include="Input.h">
+      <Filter>소스 파일\05.Input</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectTool.h" />
+    <ClInclude Include="Model.h" />
   </ItemGroup>
 </Project>

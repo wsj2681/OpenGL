@@ -7,6 +7,8 @@
 #include "Cube.h"
 #include "TextureCube.h"
 #include "Input.h"
+#include "ObjectTool.h"
+#include "Model.h"
 
 
 class Core
@@ -29,6 +31,9 @@ private:
 	GLuint texture = 0;
 	GLuint textureID = 0;
 
+	ObjectTool* objectTool = nullptr;
+	GLuint object = 0;
+
 	Triangle* triangle = nullptr;
 	Circle* circle = nullptr;
 
@@ -39,7 +44,7 @@ private:
 	mat4 MVP;
 
 	Input* input = nullptr;
-
+	Model* cubemodel = nullptr;
 public:
 	void Init();
 	void Destory();

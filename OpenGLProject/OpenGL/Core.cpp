@@ -44,12 +44,8 @@ void Core::Init()
 	glClearColor(0.f, 0.f, 0.4f, 0.f);
 
 	glEnable(GL_DEPTH_TEST);
-	glEnable(GL_CULL_FACE);
+	glDepthFunc(GL_LESS);
 	glCullFace(GL_BACK);
-	glFrontFace(GL_CCW);
-	glDepthFunc(GL_LEQUAL);
-	//glDepthFunc(GL_LESS);
-
 	input = new Input(window, framebuffer_width,framebuffer_height);
 
 	// Create ShaderTool
@@ -70,7 +66,7 @@ void Core::Init()
 	MVP = projection * view * model;
 
 	textureTool = new TextureTool;
-	texture = textureTool->LoadDDS("uvtemplate.DDS");
+	texture = textureTool->LoadDDS("uvmap.DDS");
 	textureID = glGetUniformLocation(shaderID, "textureSampler");
 
 	// Create Object
@@ -78,7 +74,15 @@ void Core::Init()
 	//circle = new Circle;
 	// cube = new Cube;
 
-	texturecube = new TextureCube;
+	//texturecube = new TextureCube;
+
+
+	// Model + OBJ file
+	cubemodel = new Model;
+	objectTool = new ObjectTool;
+	objectTool->loadOBJ("cube.obj",cubemodel->vertices, cubemodel->uvs, cubemodel->normals);
+	cubemodel->Create();
+
 }
 
 void Core::Destory()
@@ -117,8 +121,8 @@ void Core::Render()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture);
 		glUniform1i(textureID, 0);
-		glBindVertexArray(texturecube->getVAO());
-		glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
+		glBindVertexArray(cubemodel->VAO);
+		glDrawArrays(GL_TRIANGLES, 0, cubemodel->vertices.size());
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
