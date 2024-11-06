@@ -50,6 +50,8 @@ void Core::Init()
 	glDepthFunc(GL_LEQUAL);
 	//glDepthFunc(GL_LESS);
 
+	input = new Input(window, framebuffer_width,framebuffer_height);
+
 	// Create ShaderTool
 	shaderTool = new ShaderTool;
 	//shaderID = shaderTool->LoadShaders("shader.vert", "shader.frag");
@@ -86,10 +88,16 @@ void Core::Destory()
 
 void Core::Render()
 {
-	while (!glfwWindowShouldClose(this->window))
+	while (!glfwWindowShouldClose(this->window) && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS)
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		glUseProgram(shaderID);
+
+		input->computeMatricesFromInputs();
+		mat4 view = input->getViewMatrix();
+		mat4 projection = input->getProjectionMatrix();
+
+		MVP = projection * view;
 
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 

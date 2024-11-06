@@ -39,6 +39,9 @@
     <Filter Include="소스 파일\02.Polygon\03.Cube">
       <UniqueIdentifier>{cab0132c-a360-496e-a12d-a9865745e04d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\05.Input">
+      <UniqueIdentifier>{1ad4da70-cd9b-43e1-b29e-b81a4f4c4169}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -70,6 +73,9 @@
     </ClCompile>
     <ClCompile Include="TextureCube.cpp">
       <Filter>소스 파일\02.Polygon\03.Cube</Filter>
+    </ClCompile>
+    <ClCompile Include="Input.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -114,5 +120,6 @@
     <ClInclude Include="TextureCube.h">
       <Filter>소스 파일\02.Polygon\03.Cube</Filter>
     </ClInclude>
+    <ClInclude Include="Input.h" />
   </ItemGroup>
 </Project>

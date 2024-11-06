@@ -6,6 +6,8 @@
 #include "Circle.h"
 #include "Cube.h"
 #include "TextureCube.h"
+#include "Input.h"
+
 
 class Core
 {
@@ -36,6 +38,7 @@ private:
 	GLuint MatrixID = 0;
 	mat4 MVP;
 
+	Input* input = nullptr;
 
 public:
 	void Init();

@@ -142,6 +142,7 @@
     <ClCompile Include="Circle.cpp" />
     <ClCompile Include="Core.cpp" />
     <ClCompile Include="Cube.cpp" />
+    <ClCompile Include="Input.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="OpenGL.cpp" />
     <ClCompile Include="Polygon.cpp" />
@@ -160,6 +161,7 @@
     <ClInclude Include="Circle.h" />
     <ClInclude Include="Core.h" />
     <ClInclude Include="Cube.h" />
+    <ClInclude Include="Input.h" />
     <ClInclude Include="Polygon.h" />
     <ClInclude Include="ShaderTool.h" />
     <ClInclude Include="stdafx.h" />
