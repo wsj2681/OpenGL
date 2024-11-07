@@ -52,9 +52,12 @@ void Core::Init()
 	shaderTool = new ShaderTool;
 	//shaderID = shaderTool->LoadShaders("shader.vert", "shader.frag");
 	
-	shaderID = shaderTool->LoadShaders("textureshader.vert", "textureshader.frag");
+	shaderID = shaderTool->LoadShaders("suzanneshader.vert", "suzanneshader.frag");
 
 	MatrixID = glGetUniformLocation(shaderID, "MVP");
+	ViewMatrixID = glGetUniformLocation(shaderID, "V");
+	ModelMatrixID = glGetUniformLocation(shaderID, "M");
+
 	mat4 projection = perspective(radians(45.f), 4.f / 3.f, 0.1f, 100.f);
 
 	mat4 view = lookAt(
@@ -66,7 +69,7 @@ void Core::Init()
 	MVP = projection * view * model;
 
 	textureTool = new TextureTool;
-	texture = textureTool->LoadDDS("uvmap.DDS");
+	texture = textureTool->LoadDDS("suzanneuvmap.DDS");
 	textureID = glGetUniformLocation(shaderID, "textureSampler");
 
 	// Create Object
@@ -83,10 +86,21 @@ void Core::Init()
 	objectTool->loadOBJ("cube.obj",cubemodel->vertices, cubemodel->uvs, cubemodel->normals);
 	cubemodel->Create();
 
+	suzanne = new Model;
+	objectTool->loadOBJ("suzanne.obj", suzanne->vertices, suzanne->uvs, suzanne->normals);
+	suzanne->Create();
+
+	LightID = glGetUniformLocation(shaderID, "LightPosition_worldspace");
+
 }
 
 void Core::Destory()
 {
+	if (window)
+	{
+		glfwDestroyWindow(window);
+		window = nullptr;
+	}
 	glfwTerminate();
 }
 
@@ -100,10 +114,16 @@ void Core::Render()
 		input->computeMatricesFromInputs();
 		mat4 view = input->getViewMatrix();
 		mat4 projection = input->getProjectionMatrix();
+		mat4 ModelMatrix = mat4(1.0);
 
-		MVP = projection * view;
+		MVP = projection * view * ModelMatrix;
 
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
+		glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
+		glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &view[0][0]);
+		
+		vec3 lightPos = vec3(4.f, 4.f, 4.f);
+		glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
 
 		// draw triangle
 		//glBindVertexArray(triangle->getVAO());
@@ -121,8 +141,8 @@ void Core::Render()
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, texture);
 		glUniform1i(textureID, 0);
-		glBindVertexArray(cubemodel->VAO);
-		glDrawArrays(GL_TRIANGLES, 0, cubemodel->vertices.size());
+		glBindVertexArray(suzanne->VAO);
+		glDrawArrays(GL_TRIANGLES, 0, suzanne->vertices.size());
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

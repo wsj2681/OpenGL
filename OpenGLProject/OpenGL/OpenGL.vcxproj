@@ -156,6 +156,8 @@
   <ItemGroup>
     <None Include="shader.frag" />
     <None Include="shader.vert" />
+    <None Include="suzanneshader.frag" />
+    <None Include="suzanneshader.vert" />
     <None Include="textureshader.frag" />
     <None Include="textureshader.vert" />
   </ItemGroup>

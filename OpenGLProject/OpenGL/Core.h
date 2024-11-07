@@ -41,10 +41,17 @@ private:
 	TextureCube* texturecube = nullptr;
 	//view values
 	GLuint MatrixID = 0;
+	GLuint ViewMatrixID = 0;
+	GLuint ModelMatrixID = 0;
 	mat4 MVP;
+
+	GLuint LightID = 0;
 
 	Input* input = nullptr;
 	Model* cubemodel = nullptr;
+
+	Model* suzanne = nullptr;
+
 public:
 	void Init();
 	void Destory();

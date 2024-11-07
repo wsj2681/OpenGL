@@ -4,36 +4,32 @@ GLuint ShaderTool::LoadShaders(const char* vsPath, const char* fsPath)
 {
     // vertex shader File Load
     GLuint vsID = glCreateShader(GL_VERTEX_SHADER);
-    string vscode;
     ifstream vsShaderStream(vsPath, ios::in);
-    if (vsShaderStream.is_open())
-    {
-        stringstream ss;
-        ss << vsShaderStream.rdbuf();
-        vscode = ss.str();
-        vsShaderStream.close();
-    }
-    else
+    if (!vsShaderStream.is_open()) 
     {
         cout << "Vertex Shader File : " << vsPath << " cannot find file" << endl;
         return 0;
     }
 
+    stringstream vsBuffer;
+    vsBuffer << vsShaderStream.rdbuf();
+    vsShaderStream.close();
+    string vscode = vsBuffer.str();
+
     // fragment shader File Load
     GLuint fsID = glCreateShader(GL_FRAGMENT_SHADER);
-    string fscode;
     ifstream fsShaderStream(fsPath, ios::in);
-    if (fsShaderStream.is_open())
-    {
-        stringstream ss;
-        ss << fsShaderStream.rdbuf();
-        fscode = ss.str();
-        vsShaderStream.close();
-    }
-    else
+    if (!fsShaderStream.is_open()) 
     {
         cout << "Fragment Shader File : " << vsPath << " cannot find file" << endl;
+        return 0;
     }
+
+    stringstream fsBuffer;
+    fsBuffer << fsShaderStream.rdbuf();
+    fsShaderStream.close();
+    string fscode = fsBuffer.str();
+
 
     GLint result = GL_FALSE;
 

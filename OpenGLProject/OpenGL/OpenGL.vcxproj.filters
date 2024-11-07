@@ -42,6 +42,12 @@
     <Filter Include="소스 파일\05.Input">
       <UniqueIdentifier>{1ad4da70-cd9b-43e1-b29e-b81a4f4c4169}</UniqueIdentifier>
     </Filter>
+    <Filter Include="소스 파일\07.Object">
+      <UniqueIdentifier>{504e1ac5-1ad4-49b7-b4c3-ad1948c8926f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\06.Model">
+      <UniqueIdentifier>{02842e15-0b7d-4ac5-8b62-f355ae72e37b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Core.cpp">
@@ -77,11 +83,11 @@
     <ClCompile Include="Input.cpp">
       <Filter>소스 파일\05.Input</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectTool.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Model.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>소스 파일\06.Model</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectTool.cpp">
+      <Filter>소스 파일\07.Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -95,6 +101,12 @@
       <Filter>리소스 파일</Filter>
     </None>
     <None Include="textureshader.vert">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="suzanneshader.vert">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="suzanneshader.frag">
       <Filter>리소스 파일</Filter>
     </None>
   </ItemGroup>
@@ -129,7 +141,11 @@
     <ClInclude Include="Input.h">
       <Filter>소스 파일\05.Input</Filter>
     </ClInclude>
-    <ClInclude Include="ObjectTool.h" />
-    <ClInclude Include="Model.h" />
+    <ClInclude Include="Model.h">
+      <Filter>소스 파일\06.Model</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectTool.h">
+      <Filter>소스 파일\07.Object</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
