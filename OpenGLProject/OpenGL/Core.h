@@ -1,14 +1,9 @@
 #pragma once
 #include "stdafx.h"
-#include "ShaderTool.h"
-#include "TextureTool.h"
-#include "Triangle.h"
-#include "Circle.h"
-#include "Cube.h"
-#include "TextureCube.h"
-#include "Input.h"
 #include "ObjectTool.h"
+#include "Input.h"
 #include "Model.h"
+#include "TextRender.h"
 
 
 class Core
@@ -25,20 +20,9 @@ private:
 	int framebuffer_height = 0;
 
 	ShaderTool* shaderTool = nullptr;
-	GLuint shaderID = 0;
-
 	TextureTool* textureTool = nullptr;
-	GLuint texture = 0;
-	GLuint textureID = 0;
-
 	ObjectTool* objectTool = nullptr;
-	GLuint object = 0;
 
-	Triangle* triangle = nullptr;
-	Circle* circle = nullptr;
-
-	Cube* cube = nullptr;
-	TextureCube* texturecube = nullptr;
 	//view values
 	GLuint MatrixID = 0;
 	GLuint ViewMatrixID = 0;
@@ -47,10 +31,14 @@ private:
 
 	GLuint LightID = 0;
 
-	Input* input = nullptr;
-	Model* cubemodel = nullptr;
-
 	Model* suzanne = nullptr;
+
+	Input* input = nullptr;
+
+	ShaderTool* textShader = nullptr;
+	TextRender* textRender = nullptr;
+	vec3 cameraPosition = vec3(0.f, 0.f, 0.f);
+	vec3 cameraLookAT = vec3(0.f, 0.f, 0.f);
 
 public:
 	void Init();

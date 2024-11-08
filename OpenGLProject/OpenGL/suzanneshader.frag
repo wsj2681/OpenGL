@@ -8,7 +8,7 @@ in vec3 LightDirection_cameraspace;
 
 out vec3 color;
 
-uniform sampler2D myTextureSampler;
+uniform sampler2D TextureSampler;
 uniform mat4 MV;
 uniform vec3 LightPosition_worldspace;
 
@@ -18,7 +18,7 @@ void main(){
 	vec3 LightColor = vec3(1,1,1);
 	float LightPower = 50.0f;
 	
-	vec3 MaterialDiffuseColor = texture( myTextureSampler, UV ).rgb;
+	vec3 MaterialDiffuseColor = texture( TextureSampler, UV ).rgb;
 	vec3 MaterialAmbientColor = vec3(0.1,0.1,0.1) * MaterialDiffuseColor;
 	vec3 MaterialSpecularColor = vec3(0.3,0.3,0.3);
 

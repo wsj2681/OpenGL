@@ -93,5 +93,6 @@ GLuint TextureTool::LoadDDS(const char* imagepath)
 
     free(buffer);
 
+    this->textureID = textureID;
     return textureID;
 }

@@ -9,5 +9,6 @@ public:
 	~ShaderTool() = default;
 
 	GLuint LoadShaders(const char* vsPath, const char* fsPath);
+	GLuint programID = 0;
 };
 

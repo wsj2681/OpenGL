@@ -89,5 +89,7 @@ GLuint ShaderTool::LoadShaders(const char* vsPath, const char* fsPath)
     glDeleteShader(vsID);
     glDeleteShader(fsID);
 
+    this->programID = ProgramID;
+
     return ProgramID;
 }

@@ -8,5 +8,8 @@ public:
 
 	GLuint loadBMP_custom(const char* imagepath);
 	GLuint LoadDDS(const char* imagepath);
+
+	GLuint textureID = 0;
+
 };
 

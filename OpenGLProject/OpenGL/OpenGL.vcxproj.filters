@@ -18,12 +18,6 @@
     <Filter Include="소스 파일\02.Polygon">
       <UniqueIdentifier>{2bfe79ef-1305-47a8-bd21-c6d44a0c2251}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\03.Shader">
-      <UniqueIdentifier>{ee5fd81a-f465-48c9-abee-adc229a2d1d6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="소스 파일\04.Texture">
-      <UniqueIdentifier>{27591bf8-2306-4691-96da-447182a9c69a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="소스 파일\99.Common">
       <UniqueIdentifier>{7c0e6dbd-e2eb-4376-ae02-67a8af2b1655}</UniqueIdentifier>
     </Filter>
@@ -42,11 +36,23 @@
     <Filter Include="소스 파일\05.Input">
       <UniqueIdentifier>{1ad4da70-cd9b-43e1-b29e-b81a4f4c4169}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\07.Object">
-      <UniqueIdentifier>{504e1ac5-1ad4-49b7-b4c3-ad1948c8926f}</UniqueIdentifier>
+    <Filter Include="소스 파일\03.ResourceManager">
+      <UniqueIdentifier>{a7b6d9aa-ddbf-47f5-90f9-2bfcc4e36cd3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="소스 파일\06.Model">
+    <Filter Include="소스 파일\03.ResourceManager\00.ResourceManager">
+      <UniqueIdentifier>{99100e35-2a62-44bd-9e6b-c0f50b944d9d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.ResourceManager\01.ShaderTool">
+      <UniqueIdentifier>{ee5fd81a-f465-48c9-abee-adc229a2d1d6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.ResourceManager\02.TextureTool">
+      <UniqueIdentifier>{27591bf8-2306-4691-96da-447182a9c69a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.ResourceManager\04.Model">
       <UniqueIdentifier>{02842e15-0b7d-4ac5-8b62-f355ae72e37b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\03.ResourceManager\03.ObjectTool">
+      <UniqueIdentifier>{504e1ac5-1ad4-49b7-b4c3-ad1948c8926f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -60,7 +66,7 @@
       <Filter>소스 파일\00.Main</Filter>
     </ClCompile>
     <ClCompile Include="ShaderTool.cpp">
-      <Filter>소스 파일\03.Shader</Filter>
+      <Filter>소스 파일\03.ResourceManager\01.ShaderTool</Filter>
     </ClCompile>
     <ClCompile Include="Polygon.cpp">
       <Filter>소스 파일\02.Polygon\00.Polygon</Filter>
@@ -75,7 +81,7 @@
       <Filter>소스 파일\02.Polygon\03.Cube</Filter>
     </ClCompile>
     <ClCompile Include="TextureTool.cpp">
-      <Filter>소스 파일\04.Texture</Filter>
+      <Filter>소스 파일\03.ResourceManager\02.TextureTool</Filter>
     </ClCompile>
     <ClCompile Include="TextureCube.cpp">
       <Filter>소스 파일\02.Polygon\03.Cube</Filter>
@@ -84,10 +90,16 @@
       <Filter>소스 파일\05.Input</Filter>
     </ClCompile>
     <ClCompile Include="Model.cpp">
-      <Filter>소스 파일\06.Model</Filter>
+      <Filter>소스 파일\03.ResourceManager\04.Model</Filter>
     </ClCompile>
     <ClCompile Include="ObjectTool.cpp">
-      <Filter>소스 파일\07.Object</Filter>
+      <Filter>소스 파일\03.ResourceManager\03.ObjectTool</Filter>
+    </ClCompile>
+    <ClCompile Include="ResourceManager.cpp">
+      <Filter>소스 파일\03.ResourceManager\00.ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="TextRender.cpp">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -109,6 +121,12 @@
     <None Include="suzanneshader.frag">
       <Filter>리소스 파일</Filter>
     </None>
+    <None Include="textshader.vert">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="textshader.frag">
+      <Filter>리소스 파일</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Core.h">
@@ -118,7 +136,7 @@
       <Filter>소스 파일\99.Common</Filter>
     </ClInclude>
     <ClInclude Include="ShaderTool.h">
-      <Filter>소스 파일\03.Shader</Filter>
+      <Filter>소스 파일\03.ResourceManager\01.ShaderTool</Filter>
     </ClInclude>
     <ClInclude Include="Polygon.h">
       <Filter>소스 파일\02.Polygon\00.Polygon</Filter>
@@ -133,7 +151,7 @@
       <Filter>소스 파일\02.Polygon\03.Cube</Filter>
     </ClInclude>
     <ClInclude Include="TextureTool.h">
-      <Filter>소스 파일\04.Texture</Filter>
+      <Filter>소스 파일\03.ResourceManager\02.TextureTool</Filter>
     </ClInclude>
     <ClInclude Include="TextureCube.h">
       <Filter>소스 파일\02.Polygon\03.Cube</Filter>
@@ -142,10 +160,14 @@
       <Filter>소스 파일\05.Input</Filter>
     </ClInclude>
     <ClInclude Include="Model.h">
-      <Filter>소스 파일\06.Model</Filter>
+      <Filter>소스 파일\03.ResourceManager\04.Model</Filter>
     </ClInclude>
     <ClInclude Include="ObjectTool.h">
-      <Filter>소스 파일\07.Object</Filter>
+      <Filter>소스 파일\03.ResourceManager\03.ObjectTool</Filter>
     </ClInclude>
+    <ClInclude Include="ResourceManager.h">
+      <Filter>소스 파일\03.ResourceManager\00.ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="TextRender.h" />
   </ItemGroup>
 </Project>

@@ -116,7 +116,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -135,7 +135,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -148,7 +148,9 @@
     <ClCompile Include="ObjectTool.cpp" />
     <ClCompile Include="OpenGL.cpp" />
     <ClCompile Include="Polygon.cpp" />
+    <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ShaderTool.cpp" />
+    <ClCompile Include="TextRender.cpp" />
     <ClCompile Include="TextureCube.cpp" />
     <ClCompile Include="TextureTool.cpp" />
     <ClCompile Include="Triangle.cpp" />
@@ -158,6 +160,8 @@
     <None Include="shader.vert" />
     <None Include="suzanneshader.frag" />
     <None Include="suzanneshader.vert" />
+    <None Include="textshader.frag" />
+    <None Include="textshader.vert" />
     <None Include="textureshader.frag" />
     <None Include="textureshader.vert" />
   </ItemGroup>
@@ -169,8 +173,10 @@
     <ClInclude Include="Model.h" />
     <ClInclude Include="ObjectTool.h" />
     <ClInclude Include="Polygon.h" />
+    <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ShaderTool.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TextRender.h" />
     <ClInclude Include="TextureCube.h" />
     <ClInclude Include="TextureTool.h" />
     <ClInclude Include="Triangle.h" />

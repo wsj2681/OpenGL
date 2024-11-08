@@ -4,6 +4,11 @@ Model::Model()
 {
 }
 
+Model::Model(ShaderTool* shader, TextureTool* texture)
+    :shader(shader), texture(texture)
+{
+}
+
 Model::Model(vector<vec3> vertices, vector<vec2> uvs, vector<vec3> normals)
 	:vertices(vertices), uvs(uvs), normals(normals)
 {
@@ -12,6 +17,7 @@ Model::Model(vector<vec3> vertices, vector<vec2> uvs, vector<vec3> normals)
 
 Model::~Model()
 {
+
 }
 
 void Model::Create()
@@ -46,4 +52,21 @@ void Model::Create()
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+}
+
+void Model::Render(const mat4& MVP)
+{
+    if (shader && texture)
+    {
+        glUseProgram(shader->programID);
+        glUniformMatrix4fv(glGetUniformLocation(shader->programID, "MVP"), 1, GL_FALSE, &MVP[0][0]);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, texture->textureID);
+        glUniform1i(glGetUniformLocation(shader->programID, "textureSampler"), 0);
+
+        glBindVertexArray(VAO);
+        glDrawArrays(GL_TRIANGLES, 0, vertices_count);
+        glBindVertexArray(0);
+    }
 }

@@ -1,4 +1,5 @@
 #include "Core.h"
+#include "ResourceManager.h"
 
 Core::Core()
 {
@@ -8,6 +9,7 @@ Core::Core()
 Core::~Core()
 {
 	Destory();
+
 }
 
 void Core::Init()
@@ -41,56 +43,41 @@ void Core::Init()
 		exit(EXIT_FAILURE);
 	}
 
-	glClearColor(0.f, 0.f, 0.4f, 0.f);
+	glClearColor(1.f, 1.f, 1.0f, 1.f);
 
 	glEnable(GL_DEPTH_TEST);
 	glDepthFunc(GL_LESS);
 	glCullFace(GL_BACK);
+
 	input = new Input(window, framebuffer_width,framebuffer_height);
+	ResourceManager& resourceManager = ResourceManager::getInstance();
 
 	// Create ShaderTool
-	shaderTool = new ShaderTool;
-	//shaderID = shaderTool->LoadShaders("shader.vert", "shader.frag");
-	
-	shaderID = shaderTool->LoadShaders("suzanneshader.vert", "suzanneshader.frag");
+	shaderTool = resourceManager.loadShader("suzanne", "suzanneshader.vert", "suzanneshader.frag");
+	textShader = resourceManager.loadShader("text", "textshader.vert", "textshader.frag");
 
-	MatrixID = glGetUniformLocation(shaderID, "MVP");
-	ViewMatrixID = glGetUniformLocation(shaderID, "V");
-	ModelMatrixID = glGetUniformLocation(shaderID, "M");
+	// Create TextureTool
+	textureTool = resourceManager.loadTexture("suzanne", "suzanneuvmap.DDS");
+	textureTool->textureID = glGetUniformLocation(shaderTool->programID, "textureSampler");
+	
+
+	MatrixID = glGetUniformLocation(shaderTool->programID, "MVP");
+	ViewMatrixID = glGetUniformLocation(shaderTool->programID, "V");
+	ModelMatrixID = glGetUniformLocation(shaderTool->programID, "M");
 
 	mat4 projection = perspective(radians(45.f), 4.f / 3.f, 0.1f, 100.f);
 
-	mat4 view = lookAt(
-		vec3(4.f, 3.f, 3.f),
-		vec3(0.f, 0.f, 0.f),
-		vec3(0.f, 1.f, 0.f)
-	);
+	mat4 view = lookAt(vec3(4.f, 3.f, 3.f), vec3(0.f, 0.f, 0.f), vec3(0.f, 1.f, 0.f));
 	mat4 model = mat4(1.f);
 	MVP = projection * view * model;
 
-	textureTool = new TextureTool;
-	texture = textureTool->LoadDDS("suzanneuvmap.DDS");
-	textureID = glGetUniformLocation(shaderID, "textureSampler");
-
-	// Create Object
-	//triangle = new Triangle;
-	//circle = new Circle;
-	// cube = new Cube;
-
-	//texturecube = new TextureCube;
-
-
 	// Model + OBJ file
-	cubemodel = new Model;
-	objectTool = new ObjectTool;
-	objectTool->loadOBJ("cube.obj",cubemodel->vertices, cubemodel->uvs, cubemodel->normals);
-	cubemodel->Create();
+	suzanne = resourceManager.loadModel("suzanne", "suzanne.obj", shaderTool, textureTool);
 
-	suzanne = new Model;
-	objectTool->loadOBJ("suzanne.obj", suzanne->vertices, suzanne->uvs, suzanne->normals);
-	suzanne->Create();
+	// Text
+	textRender = new TextRender("CookieRun_Regular.ttf", 24);
 
-	LightID = glGetUniformLocation(shaderID, "LightPosition_worldspace");
+	LightID = glGetUniformLocation(shaderTool->programID, "LightPosition_worldspace");
 
 }
 
@@ -102,6 +89,11 @@ void Core::Destory()
 		window = nullptr;
 	}
 	glfwTerminate();
+
+	delete input;
+	delete shaderTool;
+	delete textureTool;
+	delete suzanne;
 }
 
 void Core::Render()
@@ -109,40 +101,48 @@ void Core::Render()
 	while (!glfwWindowShouldClose(this->window) && glfwGetKey(window, GLFW_KEY_ESCAPE) != GLFW_PRESS)
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-		glUseProgram(shaderID);
+
+		// ∏µ® ∑ª¥ı∏µ
+		glUseProgram(shaderTool->programID);
 
 		input->computeMatricesFromInputs();
 		mat4 view = input->getViewMatrix();
 		mat4 projection = input->getProjectionMatrix();
 		mat4 ModelMatrix = mat4(1.0);
-
 		MVP = projection * view * ModelMatrix;
 
 		glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &MVP[0][0]);
 		glUniformMatrix4fv(ModelMatrixID, 1, GL_FALSE, &ModelMatrix[0][0]);
 		glUniformMatrix4fv(ViewMatrixID, 1, GL_FALSE, &view[0][0]);
-		
+
 		vec3 lightPos = vec3(4.f, 4.f, 4.f);
 		glUniform3f(LightID, lightPos.x, lightPos.y, lightPos.z);
 
-		// draw triangle
-		//glBindVertexArray(triangle->getVAO());
-		//glDrawArrays(GL_TRIANGLES, 0, 3);
-
-		// draw circle
-		//glBindVertexArray(circle->getVAO());
-		//glDrawArrays(GL_TRIANGLE_FAN, 0, 36);
-
-		// draw cube
-		//glBindVertexArray(cube->getVAO());
-		//glDrawArrays(GL_TRIANGLES, 0, 12 * 3);
-
-		// draw texture cube
 		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glUniform1i(textureID, 0);
-		glBindVertexArray(suzanne->VAO);
-		glDrawArrays(GL_TRIANGLES, 0, suzanne->vertices.size());
+		glBindTexture(GL_TEXTURE_2D, textureTool->textureID);
+
+		suzanne->Render(MVP);
+
+		// ≈ÿΩ∫∆Æ ∑ª¥ı∏µ
+
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		glDisable(GL_DEPTH_TEST);
+
+		mat4 textprojection = ortho(0.0f, static_cast<float>(framebuffer_width), 0.0f, static_cast<float>(framebuffer_height));
+		glUseProgram(textShader->programID);
+		glUniformMatrix4fv(glGetUniformLocation(textShader->programID, "projection"), 1, GL_FALSE, value_ptr(textprojection));
+
+		textRender->RenderText(*textShader, "Hello, OpenGL!", 10.0f, 570.0f, 1.0f, glm::vec3(1.0, 1.0, 0.0));
+
+		glBindVertexArray(0);
+		glBindTexture(GL_TEXTURE_2D, 0);
+		glDisable(GL_BLEND);
+		glEnable(GL_DEPTH_TEST);
+
+		glUseProgram(shaderTool->programID);
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, textureTool->textureID);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();
