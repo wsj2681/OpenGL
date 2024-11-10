@@ -3,8 +3,6 @@
 #include "ObjectTool.h"
 #include "Input.h"
 #include "Model.h"
-#include "TextRender.h"
-
 
 class Core
 {
@@ -34,11 +32,6 @@ private:
 	Model* suzanne = nullptr;
 
 	Input* input = nullptr;
-
-	ShaderTool* textShader = nullptr;
-	TextRender* textRender = nullptr;
-	vec3 cameraPosition = vec3(0.f, 0.f, 0.f);
-	vec3 cameraLookAT = vec3(0.f, 0.f, 0.f);
 
 public:
 	void Init();

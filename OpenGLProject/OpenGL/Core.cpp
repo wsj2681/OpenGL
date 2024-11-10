@@ -54,7 +54,6 @@ void Core::Init()
 
 	// Create ShaderTool
 	shaderTool = resourceManager.loadShader("suzanne", "suzanneshader.vert", "suzanneshader.frag");
-	textShader = resourceManager.loadShader("text", "textshader.vert", "textshader.frag");
 
 	// Create TextureTool
 	textureTool = resourceManager.loadTexture("suzanne", "suzanneuvmap.DDS");
@@ -73,9 +72,6 @@ void Core::Init()
 
 	// Model + OBJ file
 	suzanne = resourceManager.loadModel("suzanne", "suzanne.obj", shaderTool, textureTool);
-
-	// Text
-	textRender = new TextRender("CookieRun_Regular.ttf", 24);
 
 	LightID = glGetUniformLocation(shaderTool->programID, "LightPosition_worldspace");
 
@@ -122,27 +118,6 @@ void Core::Render()
 		glBindTexture(GL_TEXTURE_2D, textureTool->textureID);
 
 		suzanne->Render(MVP);
-
-		// 텍스트 렌더링
-
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		glDisable(GL_DEPTH_TEST);
-
-		mat4 textprojection = ortho(0.0f, static_cast<float>(framebuffer_width), 0.0f, static_cast<float>(framebuffer_height));
-		glUseProgram(textShader->programID);
-		glUniformMatrix4fv(glGetUniformLocation(textShader->programID, "projection"), 1, GL_FALSE, value_ptr(textprojection));
-
-		textRender->RenderText(*textShader, "Hello, OpenGL!", 10.0f, 570.0f, 1.0f, glm::vec3(1.0, 1.0, 0.0));
-
-		glBindVertexArray(0);
-		glBindTexture(GL_TEXTURE_2D, 0);
-		glDisable(GL_BLEND);
-		glEnable(GL_DEPTH_TEST);
-
-		glUseProgram(shaderTool->programID);
-		glActiveTexture(GL_TEXTURE0);
-		glBindTexture(GL_TEXTURE_2D, textureTool->textureID);
 
 		glfwSwapBuffers(window);
 		glfwPollEvents();

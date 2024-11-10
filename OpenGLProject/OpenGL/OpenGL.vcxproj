@@ -150,7 +150,6 @@
     <ClCompile Include="Polygon.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ShaderTool.cpp" />
-    <ClCompile Include="TextRender.cpp" />
     <ClCompile Include="TextureCube.cpp" />
     <ClCompile Include="TextureTool.cpp" />
     <ClCompile Include="Triangle.cpp" />
@@ -176,7 +175,6 @@
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ShaderTool.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="TextRender.h" />
     <ClInclude Include="TextureCube.h" />
     <ClInclude Include="TextureTool.h" />
     <ClInclude Include="Triangle.h" />

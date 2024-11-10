@@ -98,9 +98,6 @@
     <ClCompile Include="ResourceManager.cpp">
       <Filter>소스 파일\03.ResourceManager\00.ResourceManager</Filter>
     </ClCompile>
-    <ClCompile Include="TextRender.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.vert">
@@ -168,6 +165,5 @@
     <ClInclude Include="ResourceManager.h">
       <Filter>소스 파일\03.ResourceManager\00.ResourceManager</Filter>
     </ClInclude>
-    <ClInclude Include="TextRender.h" />
   </ItemGroup>
 </Project>
